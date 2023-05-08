@@ -1,0 +1,44 @@
+/*Calculate each user's average session time. A session is defined as the time difference between a page_load and page_exit. For simplicity, assume a user has only 1 session per day and if there are multiple of the same events on that day, consider only the latest page_load and earliest page_exit. Output the user_id and their average session time*/
+
+
+With CTE1 as (
+select user_id, action, date(timestamp) as session_date, timestamp
+from facebook_web_log
+where action in ('page_load', 'page_exit')
+)
+
+/*Latest Page Load*/
+, CTE_pg_load as (
+Select user_id, action, session_date, max(timestamp) as latest_pg_load
+from CTE1
+group by user_id, action, session_date
+having action = 'page_load'
+order by user_id, action, session_date
+)
+
+/*Earliest Page Exit*/
+, CTE_pg_exit as (
+Select user_id, action, session_date, min(timestamp) as earliest_pg_exit
+from CTE1
+group by user_id, action, session_date
+having action = 'page_exit'
+order by user_id, action, session_date
+)
+
+/*Session Time*/
+
+, CTE_session_time as (
+select cpl.user_id, cpl.session_date, latest_pg_load,earliest_pg_exit, (earliest_pg_exit - latest_pg_load) as session_time
+from CTE_pg_load cpl
+join CTE_pg_exit cpe
+on cpl.user_id = cpe.user_id
+and cpl.session_date = cpe.session_date
+order by 1,2
+)
+
+/*List user_id and average time per session*/
+
+select user_id, avg(session_time)
+from CTE_session_time
+group by user_id
+order by user_id
