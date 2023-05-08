@@ -1,0 +1,41 @@
+/*What is the overall friend acceptance rate by date? Your output should have the rate of acceptances by the date the request was sent. Order by the earliest date to latest.
+
+Assume that each friend request starts by a user sending (i.e., user_id_sender) a friend request to another user (i.e., user_id_receiver) that's logged in the table with action = 'sent'. If the request is accepted, the table logs action = 'accepted'. If the request is not accepted, no record of action = 'accepted' is logged.*/
+
+/*Requests sent*/
+With CTE1 as(
+select * from fb_friend_requests
+where action = 'sent'
+)
+
+/*Requests accepted*/
+, CTE2 as (
+select * from fb_friend_requests
+where action = 'accepted'
+)
+
+/*Match requests sent to request accepted*/
+, CTE3 as (
+Select a.date as date_sent, 
+a.user_id_sender, a.user_id_receiver, 
+a.action as action_sent, b.action  as action_rec
+from CTE1 a
+left join CTE2 b
+on a.user_id_sender = b.user_id_sender and
+a.user_id_receiver = b.user_id_receiver
+order by date_sent
+)
+
+/*Count number sent and number received*/
+, CTE4 as (
+select date_sent, count(action_sent) as num_sent,
+count(action_rec) as num_recd
+from CTE3
+group by date_sent
+order by date_sent
+)
+
+/*Calculate acceptance rate*/
+select date_sent, cast(num_recd as decimal)/num_sent as Percent_accept
+from CTE4
+order by date_sent
