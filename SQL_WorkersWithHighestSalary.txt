@@ -1,0 +1,20 @@
+/*Find the job titles of the highest-paid employees.
+The output should include the highest-paid title or multiple
+titles that share the highest salary.*/
+
+/*Create a temp table.  Perform rank.*/
+
+with CTE1 as (
+select worker_title, salary,
+RANK() over (order by salary desc) as salary_rank
+ from worker
+ join title
+ on worker.worker_id = title.worker_ref_id
+ )
+ 
+/*List highest paid titles*/
+
+ select *
+   from CTE1
+  where salary_rank = 1
+  order by salary desc;
