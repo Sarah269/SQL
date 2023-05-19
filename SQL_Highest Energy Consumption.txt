@@ -1,0 +1,26 @@
+-- Highest Energy Consumption
+-- Find the date with the highest total energy consumption for
+-- the company data centers.  Output the date along with the 
+-- total energy consumption across all data centers.
+
+-- combine the three tables into one table
+with CTE1 AS (
+select date, consumption, "EU" as DC from fb_eu_energy
+union all
+select date, consumption, "AS" as DC from fb_asia_energy
+union all
+select date, consumption, "NA" as DC from fb_na_energy
+)
+
+-- Sum consumption by date
+,  CTE2 AS (
+select date, sum(consumption) as sum_consumption from CTE1
+group by date
+order by date)
+
+--  Output the date with the highest consumption
+select date, sum_consumption
+from CTE2
+where sum_consumption in 
+  (select max(sum_consumption) from CTE2);
+
