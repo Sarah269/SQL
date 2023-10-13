@@ -1,0 +1,25 @@
+Find the percentage of shipable orders.
+Consider an order is shipable if the customer's address is known.
+
+
+-- Join orders and customer tables
+-- select order id, customer id, and address
+With CTE1 AS (
+select
+o.id
+,o.cust_id
+,c.address
+from orders o
+join customers c
+on o.cust_id = c.id
+)
+
+-- count # of orders with addresses
+-- count total # of orders
+-- calculate percent of orders that are shippable
+select tot_orders, canship, (canship/tot_orders)*100
+from (
+select
+(select count(*) from CTE1 )as tot_orders,
+(select count(*) 
+from CTE1 where address is not null) as canship) as c_orders
