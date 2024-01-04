@@ -1,0 +1,35 @@
+# Managers with at least 5 direct reports
+
+ select name from employee
+ where id in (
+    select managerID
+    from employee
+    group by managerID
+    having count(*) >=5
+ )
+
+# Confirmation Rate
+# Calculate the confirmation rate = number of confirmed messages/numver of requested confirmation messages
+# Confirmation rate of a user that did not request any confirmation messages is 0
+# Round confirmation rate to two decimal places
+
+With CTE1 AS (
+select user_id,
+  (select format(count(action),2) from confirmations 
+   where user_id = a.user_id group by user_id) as msgs,
+  (select format(count(action),2) from confirmations
+   where user_id = a.user_id and action = 'confirmed'group by user_id) as confirmed
+from confirmations a
+group by user_id)
+
+
+# use coalesce to change null to 0
+# use format to change integer to float
+# division by 0 returns null
+
+select s.user_id, format(coalesce((coalesce(confirmed,0)/ coalesce(msgs,0)),0),2) as confirmation_rate
+from signups s
+left join CTE1 c
+on s.user_id = c.user_id
+
+
