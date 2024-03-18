@@ -1,0 +1,13 @@
+-- Dataset of health inspections. Count the number of violation in 
+-- an inspection in 'Roxanne Cafe' for each year.  If an inspection
+-- resulted in a violation, there will be a value in the 'violationo_id'
+-- column.  Output the number of violations by year in ascending order.
+
+
+
+select extract(year from inspection_date) as inspection_yr
+, count(*) as n_inspections
+from sf_restaurant_health_violations
+where business_name = 'Roxanne Cafe'
+and violation_id is not null
+group by inspection_yr

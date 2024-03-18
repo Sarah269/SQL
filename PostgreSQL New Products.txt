@@ -1,0 +1,27 @@
+-- New Products
+-- You are given a table of product launches by company by year. Write a
+-- query to count the net difference between the number of products 
+-- companies launched in 2020 with the number of products companies launched
+-- in the previous year. Output the name of the commpanies and a net 
+-- difference of net products released for 2020 compared to the
+-- previous year
+
+
+
+with CTE1 as (
+select company_name, year, count(*) as num_products
+from car_launches
+group by company_name, year
+order by company_name, year desc
+),
+
+CTE2 AS (
+select company_name, year, num_products,
+lag(num_products,1) over (partition by company_name order by company_name, year) as prioryr_products
+from CTE1
+)
+
+select company_name,  (num_products - prioryr_products) as net_products
+from CTE2
+where year = 2020
+order by company_name
