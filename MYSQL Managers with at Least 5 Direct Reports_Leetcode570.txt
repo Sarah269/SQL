@@ -1,0 +1,12 @@
+# Leetcode 570
+# Managers with at Least 5 Direct Reports
+# Find managers with at least 5 direct reports
+
+select name from Employee
+where id in (
+
+select managerId
+from employee
+group by managerId
+having count(*) >=5
+)

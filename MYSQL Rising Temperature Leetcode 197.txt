@@ -1,0 +1,17 @@
+# Leetcode 197
+# Rising Temperature
+# Find all dates' id with higher temperature than previous date
+
+
+with CTE1 AS (
+select id, recordDate, temperature,
+LAG(temperature) OVER(ORDER BY recordDate ) AS prev_temp,
+Lag(recordDate) Over(Order by recordDate) as prev_recordDate
+from Weather
+order by recordDate desc
+ )
+
+select id
+from CTE1
+where temperature > prev_temp
+and prev_recordDate = Date_sub(recordDate, INTERVAL 1 DAY)

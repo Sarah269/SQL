@@ -1,0 +1,34 @@
+-- Apple Products Counts
+-- Find the number of Apple product users and
+-- number of total users with any device
+-- Output the langage along with the total number of
+-- Apple users and users with any device
+
+with CTE AS (
+select user_id, 
+(select count(*) 
+from playbook_events b
+where b.user_id = a.user_id
+and device in ('macbook pro', 'iphone 5s', 'ipad air'))as apple_device,
+(select count(*)
+from playbook_events b
+where b.user_id = a.user_id
+)as any_device
+
+from playbook_events a
+group by user_id
+order by any_device desc
+)
+
+, 
+CTE2 As (select c.*, language
+from CTE c
+join playbook_users p
+on c.user_id = p.user_id)
+
+select language,
+count(*) as total_users,
+SUM(CASE WHEN apple_device > 0 THEN 1 ELSE 0 END) as total_apple_users
+from CTE2
+group by language
+order by total_users desc
