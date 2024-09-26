@@ -1,0 +1,12 @@
+# Leetcode 1633
+# Percentage of Users Attended a Contest
+# Find the percentage of the users registered in each
+# contest rounded to two decimals
+# order by percentage descending order, contest_id ascending order
+
+
+select contest_id, round((count(*) /
+(select count(*) from Users))*100,2) as percentage
+from Register
+group by contest_id
+order by percentage desc, contest_id

@@ -1,0 +1,11 @@
+# Leetcode 196
+# Delete Duplicate Emails
+# Delte all duplicate emails, keeping only one unique emal with
+# the smallest id
+#
+
+delete p1
+from Person p1
+join Person p2
+where p1.email = p2.email
+and p1.id > p2.id

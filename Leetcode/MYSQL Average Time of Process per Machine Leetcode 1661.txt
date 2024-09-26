@@ -1,0 +1,21 @@
+# Leetcode 1661
+# Average Time of Process per Machine
+# Calculate the total time to complete every process 
+# List average time by machine_id rounded to 3 decimal places
+
+with CTE1 as (
+select machine_id,  
+(
+select timestamp 
+from Activity b
+where activity_type = "end"
+and b.machine_id = a.machine_id and
+b.process_id = a.process_id) - timestamp as total_time
+
+from Activity a
+where activity_type = "start"
+order by machine_id, process_id)
+
+select machine_id, round(avg(total_time),3) as processing_time
+from CTE1
+group by machine_Id

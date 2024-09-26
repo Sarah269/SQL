@@ -1,0 +1,10 @@
+# Leetcode 1517
+# Find Users With Valid E-mails
+# Find uses who have vaild emails
+# prefix name may contains upper or lower case letter, digits, '-', '.'
+# '-'.  prefix name must start with a letter.  
+
+
+select user_id, name, mail
+from Users
+where REGEXP_LIKE(mail,'^[a-zA-Z]+[a-zA-Z0-9\_\.\-]*@leetcode[.]com$')

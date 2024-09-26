@@ -1,0 +1,8 @@
+# Leetcode 1667
+# Fix Names in a Table
+# Solution to fix the names so that only the first character is 
+# uppercase and the rest is lowercase
+
+select user_id, concat(upper(substr(name,1,1)),lower(substr(name,2,length(name))))as name
+from Users
+order by user_id

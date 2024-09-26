@@ -1,0 +1,16 @@
+# Leetcode 180
+# Consecutive Numbers
+# Find a numbers that appear at least three times consecutively
+
+
+with CTE as (
+select id, num,
+lead(num,1) over(order by id) as num_next,
+lead(num,2) over (order by id) as num_next_2
+from Logs
+)
+
+
+select distinct num as ConsecutiveNums
+from CTE
+where num = num_next and num_next = num_next_2

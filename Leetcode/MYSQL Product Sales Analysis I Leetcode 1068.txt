@@ -1,0 +1,9 @@
+# Leetcode 1068
+# Product Sales Analysis I
+# Report product_name, year, and price for each sale_id
+
+select product_name, year, price
+from Sales a
+join Product b
+on a.product_id = b.product_id
+group by sale_id

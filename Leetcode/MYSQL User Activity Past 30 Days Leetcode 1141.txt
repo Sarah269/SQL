@@ -1,0 +1,11 @@
+# Leetcode 1141
+# User Activity for the Past 30 Days
+# Find daily active user count for a period of 30 days
+# ending 2019-07-27. A user is active if they made at least
+# one activity on that day
+
+
+select activity_date as day, count(distinct user_id, activity_date) as active_users
+from Activity
+where activity_date between date_sub("2019-07-27", INTERVAL 29 DAY) and "2019-07-27"
+group by activity_date

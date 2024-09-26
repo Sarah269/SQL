@@ -1,0 +1,26 @@
+# Leetcode 1164
+# Product Price at a Give Date
+# Find the prices of all products on 2019-08-16.
+# Assume the price of all products before any change is 10.
+# Solution beat 98.49%  381ms
+
+
+with CTE as (
+   select max(change_date) as dt, product_id
+   from Products p
+   where change_date <= "2019-08-16"
+   group by product_id
+   union
+   select change_date as dt, product_id
+   from Products
+   group by product_id
+   having min(change_date) > "2019-08-16"
+)
+
+select c.product_id, 
+case when change_date > "2019-08-16" then 10 else new_price end as price
+from cte c
+join Products a
+on c.product_id = a.product_id
+and c.dt = a.change_date
+    

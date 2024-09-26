@@ -1,0 +1,9 @@
+# Leetcode 596
+# Classes More Than 5 Students
+# Fina all the classes that have at least five students
+
+
+select class
+from Courses
+group by class
+having count(*) >= 5

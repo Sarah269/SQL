@@ -1,0 +1,11 @@
+# Leetcode 620
+# Not Boring Movies
+# Report movies with an odd-numbered ID and a description 
+# that is not "boring"
+
+
+select *
+from Cinema
+where mod(id,2) =1
+and description != "boring"
+order by rating desc

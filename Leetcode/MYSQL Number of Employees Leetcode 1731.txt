@@ -1,0 +1,15 @@
+# Leetcode 1731
+# The Number of Employees Which Report to Each Employee
+# Report the ids and the names of all managers, the number
+# of employees who report directly to them, and the
+# average age of the reports to the nearest integer
+# order by employee id
+
+
+select a.reports_to as employee_id, b.name, count(*) as reports_count,
+round(avg(a.age),0) as average_age
+from Employees a
+join Employees b
+on a.reports_to = b.employee_id
+group by a.reports_to
+order by employee_id

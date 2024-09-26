@@ -1,0 +1,10 @@
+# Leetcode 1148
+# Article Views I
+# Find all the authors that viewed at least one of their own articles
+
+select author_id as id
+from Views
+where author_id = viewer_id
+group by author_id
+having count(*) >= 1
+order by author_id
