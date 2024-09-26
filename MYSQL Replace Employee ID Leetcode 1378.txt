@@ -1,9 +1,0 @@
-# Leetcode 1378
-# Replace Employee ID With The Unique Identifier
-# Show the unique ID of each user, if a user does not have
-# a unique ID replace just show null
-
-select unique_id, name
-from Employees a
-left join EmployeeUNI b
-on a.id = b.id
