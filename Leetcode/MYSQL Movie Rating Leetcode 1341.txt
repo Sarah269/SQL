@@ -1,0 +1,42 @@
+# Leetcode 1341
+# Movie Rating
+# Find the name of the user who has rated the greatest number of movies
+# Find the movie name with the highest average rating in February 2020
+
+with ratings as (
+select user_id, count(rating) as num_ratings
+from MovieRating
+group by user_id)
+
+, high_rating as (
+    select movie_id, avg(rating) as avg_rating
+    from MovieRating
+    where month(created_at) = '02'
+    and year(created_at) = '2020'
+    group by movie_id
+
+)
+
+(select name as results
+from Users u
+join ratings r
+on u.user_id = r.user_id
+where num_ratings in (
+    select max(num_ratings)
+    from ratings)
+
+order by name
+limit 1)
+union all
+
+(select title as results
+from Movies m
+join high_rating h
+on m.movie_id = h.movie_id
+where avg_rating in (
+      select max(avg_rating)
+      from high_rating)
+
+order by title
+limit 1
+)

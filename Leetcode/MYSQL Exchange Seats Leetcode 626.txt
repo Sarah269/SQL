@@ -1,0 +1,17 @@
+# Leetcode 626
+# Exchange Seats
+# Swap the seat id of every two consecutive students. If the
+# numbers of students is odd, heid of the last students is
+# not swapped
+# orderd in ascending order
+
+
+select s1.id as id, 
+case when s2.id is null then s1.student else s2.student end as student
+from Seat s1
+left join Seat s2
+on s1.id = 
+  case when s1.id % 2 = 0 then s2.id+1
+       when s1.id % 2 != 0 then s2.id -1
+       end
+order by id

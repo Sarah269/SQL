@@ -1,0 +1,24 @@
+# Leetcode 1907
+# Count Salary Categories
+# Write a solution to calculate the number of bank accounts
+# for each salary category: Low Salary, Average Salary, High Salary
+# Result table must contain all three categories
+
+select category, sum(acct_cnt) as accounts_count
+from (
+
+select
+case when income < 20000 then "Low Salary"
+     when income between 20000 and 50000 then "Average Salary"
+     when income > 50000 then "High Salary" end as category, 
+count(account_id) as acct_cnt
+from Accounts
+group by category
+union all
+select "Low Salary" as category, 0 as acct_cnt
+union all
+select "High Salary" as category, 0 as acct_cnt
+union all
+select "Average Salary" as category, 0 as acct_cnt
+) as sum_accounts
+group by category
