@@ -1,0 +1,12 @@
+# Leetcode 1070
+# Product Sales Analysis III
+# Select the product_id, year, quantity, price for the
+# first year of every product sold
+
+
+select product_id, year as first_year, quantity, price
+from Sales
+where (product_id, year) in 
+(select product_id, min(year) as year
+from Sales
+group by product_id)
