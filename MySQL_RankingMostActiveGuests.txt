@@ -1,0 +1,17 @@
+-- Ranking Most Active Guests
+-- Identify the most engaged guests by ranking them according to their overall 
+-- messaging activity.
+-- ID 10159
+
+with cte as (
+select id_guest
+ , sum(n_messages) as sum_n_messages
+from airbnb_contacts
+group by id_guest
+)
+
+
+select id_guest
+, dense_rank() over (order by sum_n_messages desc) as ranking
+, sum_n_messages
+from cte

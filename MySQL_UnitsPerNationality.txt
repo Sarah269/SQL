@@ -1,0 +1,13 @@
+-- Number of Units Per Nationality
+-- How many different apartments are owned by people under 30
+-- broken down by their nationality
+-- ID 10156
+
+
+select nationality, count(distinct unit_id) as apartment_count
+from airbnb_hosts a
+join airbnb_units u
+on a.host_id = u.host_id
+where age < 30 and unit_type = "apartment"
+group by nationality
+order by apartment_count desc

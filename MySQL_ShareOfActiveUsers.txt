@@ -1,0 +1,13 @@
+-- Share of Active Users
+-- Calculate the percentage of users who are both from the US
+-- and an "open" status
+-- ID 2005
+
+with cte as (
+select count(*) as num_user
+, sum(case when status = "open" and country = "USA" then 1 else 0 end) as US_open
+from fb_active_users
+)
+
+select (US_open/num_user) * 100 as Us_active_share
+from cte
